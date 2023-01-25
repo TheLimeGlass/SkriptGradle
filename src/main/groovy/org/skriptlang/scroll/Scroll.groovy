@@ -15,7 +15,7 @@ class Scroll implements Plugin<Project> {
 	private static final String EXTENSION_NAME = 'scroll';
 
 	@Override
-    void apply(Project project) {
+	void apply(Project project) {
 		project.plugins.apply(ScrollBasePlugin)
 
 		ScrollPluginExtension extension = project.extensions.create(EXTENSION_NAME, ScrollPluginExtension, project)

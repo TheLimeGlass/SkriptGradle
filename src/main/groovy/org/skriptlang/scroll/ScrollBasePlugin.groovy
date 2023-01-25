@@ -9,7 +9,7 @@ class ScrollBasePlugin implements Plugin<Project> {
 	//private static final String SCROLL_VERSION = '@version@';
 
 	@Override
-    void apply(Project project) {
+	void apply(Project project) {
 		project.configurations.create(CONFIGURATION_NAME)
 				.setVisible(false)
 				.setTransitive(true)
