@@ -1,0 +1,67 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+	id 'com.github.johnrengelman.shadow' version '7.1.2'
+	id 'com.gradle.plugin-publish' version '1.1.0'
+	id 'java-gradle-plugin'
+	id 'maven-publish'
+	id 'eclipse'
+	id 'groovy'
+}
+
+def compatibilityVersion = JavaVersion.VERSION_1_8
+sourceCompatibility = compatibilityVersion
+targetCompatibility = compatibilityVersion
+group = 'org.skriptlang'
+version = '1.0.0'
+
+repositories {
+	mavenCentral()
+	maven {
+		url 'https://jitpack.io'
+	}
+}
+
+dependencies {
+	shadow 'com.github.johnrengelman:shadow:7.1.2'
+}
+
+gradlePlugin {
+	plugins {
+		scroll {
+			id = 'org.skriptlang.scroll' 
+			displayName = 'Scroll Skript Plugin'
+			implementationClass = 'org.skriptlang.scroll.Scroll'
+			description = 'Gradle plugin to help automate addon testing. https://github.com/SkriptLang'
+		}
+	}
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar) {
+    dependsOn javadoc
+    archiveClassifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+processResources {
+	filter ReplaceTokens, tokens: ["version": version]
+}
+
+shadowJar {
+	configurations = [project.configurations.shadow]
+	archiveVersion = version
+	baseName = project.name
+	classifier = ''
+	minimize()
+}
